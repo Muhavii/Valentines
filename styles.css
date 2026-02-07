@@ -1,0 +1,756 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+body.shake {
+    animation: screenShake 0.5s ease;
+}
+
+.container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 60px 80px;
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.8s ease;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+.love-message {
+    font-size: 1.3rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-style: italic;
+    min-height: 180px;
+}
+
+.love-message::after {
+    content: '|';
+    animation: blink 0.7s infinite;
+}
+
+.title {
+    font-size: 3rem;
+    color: #e91e63;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1),
+                 0 0 10px rgba(233, 30, 99, 0.5),
+                 0 0 20px rgba(233, 30, 99, 0.3);
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+.buttons {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 18px 50px;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.yes-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.yes-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+}
+
+.no-btn {
+    background: #ddd;
+    color: #666;
+}
+
+.no-btn:hover {
+    background: #ccc;
+    transform: scale(0.95);
+}
+
+.flower-container {
+    display: none;
+    text-align: center;
+    position: relative;
+}
+
+.flower-container.show {
+    display: block;
+    animation: fadeIn 1s ease;
+}
+
+.message {
+    font-size: 3rem;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 50px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3),
+                 0 0 20px rgba(255, 255, 255, 0.8),
+                 0 0 40px rgba(255, 182, 193, 0.6);
+    animation: bounce 1s ease infinite, glowPulse 2s ease-in-out infinite;
+}
+
+.flower-garden {
+    position: relative;
+    display: flex;
+    gap: 100px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.flower {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    margin: 0 auto;
+    filter: drop-shadow(0 10px 30px rgba(255, 107, 157, 0.4));
+}
+
+.stem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 0;
+    background: linear-gradient(to bottom, #4caf50, #2e7d32);
+    border-radius: 4px;
+    animation: growStem 1.5s ease forwards;
+}
+
+.leaf {
+    position: absolute;
+    width: 40px;
+    height: 60px;
+    background: #4caf50;
+    border-radius: 0 100% 100% 0;
+    opacity: 0;
+}
+
+.leaf-left {
+    bottom: 150px;
+    left: 50%;
+    transform: translateX(-50px) rotate(-30deg);
+    animation: growLeaf 0.8s ease 1s forwards;
+}
+
+.leaf-right {
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(10px) rotate(150deg);
+    animation: growLeaf 0.8s ease 1.2s forwards;
+}
+
+.flower-center {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    height: 250px;
+}
+
+.petal-layer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+}
+
+.petal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50% 50% 50% 0;
+    transform-origin: 0 100%;
+    opacity: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.petal-outer {
+    width: 80px;
+    height: 130px;
+    background: linear-gradient(135deg, #ff1744 0%, #ff6b9d 50%, #ffa6c9 100%);
+}
+
+.petal-middle {
+    width: 70px;
+    height: 110px;
+    background: linear-gradient(135deg, #ff4081 0%, #ff80ab 50%, #ffc1e3 100%);
+}
+
+.petal-inner {
+    width: 60px;
+    height: 90px;
+    background: linear-gradient(135deg, #f50057 0%, #ff6090 50%, #ffb3d9 100%);
+}
+
+.layer-3 .petal:nth-child(1) {
+    animation: bloomPetal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.5s forwards, swayPetal 3s ease-in-out 2.5s infinite;
+    transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.layer-3 .petal:nth-child(2) {
+    animation: bloomPetal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.6s forwards, swayPetal 3s ease-in-out 2.6s infinite;
+    transform: translate(-50%, -50%) rotate(60deg);
+}
+
+.layer-3 .petal:nth-child(3) {
+    animation: bloomPetal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.7s forwards, swayPetal 3s ease-in-out 2.7s infinite;
+    transform: translate(-50%, -50%) rotate(120deg);
+}
+
+.layer-3 .petal:nth-child(4) {
+    animation: bloomPetal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.8s forwards, swayPetal 3s ease-in-out 2.8s infinite;
+    transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.layer-3 .petal:nth-child(5) {
+    animation: bloomPetal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.9s forwards, swayPetal 3s ease-in-out 2.9s infinite;
+    transform: translate(-50%, -50%) rotate(240deg);
+}
+
+.layer-3 .petal:nth-child(6) {
+    animation: bloomPetal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 2s forwards, swayPetal 3s ease-in-out 3s infinite;
+    transform: translate(-50%, -50%) rotate(300deg);
+}
+
+.sparkles {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    height: 250px;
+    pointer-events: none;
+}
+
+.sparkle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    opacity: 0;
+}
+
+.sparkle:nth-child(1) {
+    top: 20%;
+    left: 20%;
+    animation: sparkleAnimation 1.5s ease-in-out 2s infinite;
+}
+
+.sparkle:nth-child(2) {
+    top: 30%;
+    right: 15%;
+    animation: sparkleAnimation 1.5s ease-in-out 2.3s infinite;
+}
+
+.sparkle:nth-child(3) {
+    top: 50%;
+    left: 10%;
+    animation: sparkleAnimation 1.5s ease-in-out 2.6s infinite;
+}
+
+.sparkle:nth-child(4) {
+    top: 50%;
+    right: 10%;
+    animation: sparkleAnimation 1.5s ease-in-out 2.9s infinite;
+}
+
+.sparkle:nth-child(5) {
+    top: 70%;
+    left: 25%;
+    animation: sparkleAnimation 1.5s ease-in-out 3.2s infinite;
+}
+
+.sparkle:nth-child(6) {
+    top: 70%;
+    right: 25%;
+    animation: sparkleAnimation 1.5s ease-in-out 3.5s infinite;
+}
+
+.sparkle:nth-child(7) {
+    top: 40%;
+    left: 50%;
+    animation: sparkleAnimation 1.5s ease-in-out 3.8s infinite;
+}
+
+.sparkle:nth-child(8) {
+    top: 60%;
+    left: 50%;
+    animation: sparkleAnimation 1.5s ease-in-out 4.1s infinite;
+}
+
+.layer-2 .petal:nth-child(1) {
+    animation: bloomPetal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 2.1s forwards, swayPetal 3s ease-in-out 3s infinite;
+    transform: translate(-50%, -50%) rotate(30deg);
+}
+
+.layer-2 .petal:nth-child(2) {
+    animation: bloomPetal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 2.2s forwards, swayPetal 3s ease-in-out 3.1s infinite;
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.layer-2 .petal:nth-child(3) {
+    animation: bloomPetal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 2.3s forwards, swayPetal 3s ease-in-out 3.2s infinite;
+    transform: translate(-50%, -50%) rotate(150deg);
+}
+
+.layer-2 .petal:nth-child(4) {
+    animation: bloomPetal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 2.4s forwards, swayPetal 3s ease-in-out 3.3s infinite;
+    transform: translate(-50%, -50%) rotate(210deg);
+}
+
+.layer-2 .petal:nth-child(5) {
+    animation: bloomPetal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 2.5s forwards, swayPetal 3s ease-in-out 3.4s infinite;
+    transform: translate(-50%, -50%) rotate(270deg);
+}
+
+.layer-2 .petal:nth-child(6) {
+    animation: bloomPetal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 2.6s forwards, swayPetal 3s ease-in-out 3.5s infinite;
+    transform: translate(-50%, -50%) rotate(330deg);
+}
+
+.layer-1 .petal:nth-child(1) {
+    animation: bloomPetal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 2.7s forwards, swayPetal 3s ease-in-out 3.6s infinite;
+    transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.layer-1 .petal:nth-child(2) {
+    animation: bloomPetal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 2.8s forwards, swayPetal 3s ease-in-out 3.6s infinite;
+    transform: translate(-50%, -50%) rotate(60deg);
+}
+
+.layer-1 .petal:nth-child(3) {
+    animation: bloomPetal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 2.9s forwards, swayPetal 3s ease-in-out 3.7s infinite;
+    transform: translate(-50%, -50%) rotate(120deg);
+}
+
+.layer-1 .petal:nth-child(4) {
+    animation: bloomPetal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 3s forwards, swayPetal 3s ease-in-out 3.8s infinite;
+    transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.layer-1 .petal:nth-child(5) {
+    animation: bloomPetal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 3.1s forwards, swayPetal 3s ease-in-out 3.9s infinite;
+    transform: translate(-50%, -50%) rotate(240deg);
+}
+
+.layer-1 .petal:nth-child(6) {
+    animation: bloomPetal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 3.2s forwards, swayPetal 3s ease-in-out 4s infinite;
+    transform: translate(-50%, -50%) rotate(300deg);
+}
+
+.center-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #fff59d 0%, #ffd700 50%, #ffa000 100%);
+    border-radius: 50%;
+    animation: bloomCenter 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 3.3s forwards, pulseCenter 2s ease-in-out 4s infinite;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), inset 0 0 10px rgba(255, 193, 7, 0.5);
+}
+
+.hearts {
+    position: absolute;
+    top: -50px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.heart {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #ff1744;
+    transform: rotate(-45deg);
+    animation: floatHeart 3s ease-in-out infinite;
+    opacity: 0;
+}
+
+.heart::before,
+.heart::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #ff1744;
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -15px;
+    left: 0;
+}
+
+.heart::after {
+    top: 0;
+    left: 15px;
+}
+
+.heart:nth-child(1) {
+    left: 10%;
+    animation-delay: 2.5s;
+}
+
+.heart:nth-child(2) {
+    left: 30%;
+    animation-delay: 2.7s;
+}
+
+.heart:nth-child(3) {
+    left: 50%;
+    animation-delay: 2.9s;
+}
+
+.heart:nth-child(4) {
+    left: 70%;
+    animation-delay: 3.1s;
+}
+
+.heart:nth-child(5) {
+    left: 90%;
+    animation-delay: 3.3s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes growStem {
+    to {
+        height: 250px;
+    }
+}
+
+@keyframes growLeaf {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bloomPetal {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+    }
+    60% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes swayPetal {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.02);
+    }
+}
+
+@keyframes bloomCenter {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes pulseCenter {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), inset 0 0 10px rgba(255, 193, 7, 0.5);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        box-shadow: 0 0 40px rgba(255, 215, 0, 1), inset 0 0 15px rgba(255, 193, 7, 0.7);
+    }
+}
+
+@keyframes sparkleAnimation {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+}
+
+@keyframes floatHeart {
+    0% {
+        opacity: 0;
+        transform: translateY(0) rotate(-45deg);
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-200px) rotate(-45deg);
+    }
+}
+
+/* Canvas layers */
+#confettiCanvas, #fireworksCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+#fireworksCanvas {
+    z-index: 999;
+}
+
+/* Cursor trail */
+#cursorTrail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 998;
+}
+
+.sparkle-trail {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #fff, #ffd700);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: sparkleTrailFade 0.8s ease-out forwards;
+    box-shadow: 0 0 10px #ffd700;
+}
+
+/* Ambient particles */
+#particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: floatParticle linear infinite;
+}
+
+/* 3D Hearts */
+.hearts-3d {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    perspective: 1000px;
+    z-index: 100;
+}
+
+.heart-3d {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    animation: float3DHeart 6s ease-in-out infinite;
+    transform-style: preserve-3d;
+}
+
+.heart-3d::before,
+.heart-3d::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 23, 68, 0.8);
+    border-radius: 50%;
+}
+
+.heart-3d::before {
+    top: -20px;
+    left: 0;
+}
+
+.heart-3d::after {
+    top: 0;
+    left: 20px;
+}
+
+.heart-3d .heart-core {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 23, 68, 0.8);
+    transform: rotate(45deg);
+}
+
+/* Animations */
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes screenShake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-5px, -5px); }
+    20%, 40%, 60%, 80% { transform: translate(5px, 5px); }
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1),
+                     0 0 10px rgba(233, 30, 99, 0.5),
+                     0 0 20px rgba(233, 30, 99, 0.3);
+    }
+    50% {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1),
+                     0 0 20px rgba(233, 30, 99, 0.8),
+                     0 0 40px rgba(233, 30, 99, 0.6),
+                     0 0 60px rgba(233, 30, 99, 0.4);
+    }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes sparkleTrailFade {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+@keyframes floatParticle {
+    0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) translateX(var(--drift, 0));
+        opacity: 0;
+    }
+}
+
+@keyframes float3DHeart {
+    0%, 100% {
+        transform: translateY(0) rotateY(0deg) rotateX(0deg);
+    }
+    25% {
+        transform: translateY(-30px) rotateY(90deg) rotateX(10deg);
+    }
+    50% {
+        transform: translateY(-60px) rotateY(180deg) rotateX(-10deg);
+    }
+    75% {
+        transform: translateY(-30px) rotateY(270deg) rotateX(10deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2rem;
+    }
+    
+    .container {
+        padding: 40px 30px;
+    }
+    
+    .btn {
+        padding: 15px 35px;
+        font-size: 1.2rem;
+    }
+    
+    .message {
+        font-size: 2rem;
+    }
+    
+    .flower-garden {
+        gap: 50px;
+    }
+}

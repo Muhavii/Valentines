@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Be My Valentine? 💕</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <audio id="bgMusic" autoplay loop>
+        <source src="NightsLikeThis.mp3" type="audio/mpeg">
+    </audio>
+    <canvas id="confettiCanvas"></canvas>
+    <canvas id="fireworksCanvas"></canvas>
+    <div id="cursorTrail"></div>
+    <div id="particles"></div>
+    <div class="container" id="questionContainer">
+        <p class="love-message" id="loveMessage" data-text="Ever since I first saw you in school, I instantly knew you are the ONE. That said, I am glad we got to talk, get to know each other. Even though the past year was a bit of an emotional rollercoaster, I'm really glad we pulled through and I want to let you know that I am in love with you, forever will be.">
+        </p>
+        <h1 class="title">Waringa, Will you be my Valentine? 💖</h1>
+        <div class="buttons">
+            <button id="yesBtn" class="btn yes-btn">Yes! 💕</button>
+            <button id="noBtn" class="btn no-btn">No</button>
+        </div>
+    </div>
+
+    <div class="flower-container" id="flowerContainer">
+        <div class="message">See you on 14th! 💕</div>
+        <div class="hearts-3d" id="hearts3d"></div>
+        <div class="flower-garden" id="flowerGarden">
+        <div class="flower">
+            <div class="stem"></div>
+            <div class="leaf leaf-left"></div>
+            <div class="leaf leaf-right"></div>
+            <div class="sparkles">
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+            </div>
+            <div class="flower-center">
+                <div class="petal-layer layer-3">
+                    <div class="petal petal-outer"></div>
+                    <div class="petal petal-outer"></div>
+                    <div class="petal petal-outer"></div>
+                    <div class="petal petal-outer"></div>
+                    <div class="petal petal-outer"></div>
+                    <div class="petal petal-outer"></div>
+                </div>
+                <div class="petal-layer layer-2">
+                    <div class="petal petal-middle"></div>
+                    <div class="petal petal-middle"></div>
+                    <div class="petal petal-middle"></div>
+                    <div class="petal petal-middle"></div>
+                    <div class="petal petal-middle"></div>
+                    <div class="petal petal-middle"></div>
+                </div>
+                <div class="petal-layer layer-1">
+                    <div class="petal petal-inner"></div>
+                    <div class="petal petal-inner"></div>
+                    <div class="petal petal-inner"></div>
+                    <div class="petal petal-inner"></div>
+                    <div class="petal petal-inner"></div>
+                    <div class="petal petal-inner"></div>
+                </div>
+                <div class="center-circle"></div>
+            </div>
+        </div>
+        <div class="hearts">
+            <div class="heart"></div>
+            <div class="heart"></div>
+            <div class="heart"></div>
+            <div class="heart"></div>
+            <div class="heart"></div>
+        </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
