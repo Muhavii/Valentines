@@ -40,19 +40,35 @@ function typeWriter(element, text, speed = 30) {
     type();
 }
 
-// Start typewriter on load
+// Start typewriter and music on load
 window.addEventListener('load', () => {
     const text = loveMessage.getAttribute('data-text');
     typeWriter(loveMessage, text);
     
-    // Try to play music on load
-    bgMusic.play().catch(e => {
-        console.log('Autoplay blocked, will play on first interaction');
-        // Play on first user interaction
-        document.body.addEventListener('click', () => {
-            bgMusic.play();
-        }, { once: true });
-    });
+    // Attempt to play music immediately
+    const playPromise = bgMusic.play();
+    
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+            console.log('Music started playing automatically');
+        }).catch(error => {
+            console.log('Autoplay prevented. Music will start on first interaction.');
+            // Add click listeners to start music on any interaction
+            const startMusic = () => {
+                bgMusic.play();
+                document.removeEventListener('click', startMusic);
+                document.removeEventListener('touchstart', startMusic);
+            };
+            document.addEventListener('click', startMusic);
+            document.addEventListener('touchstart', startMusic);
+        });
+    }
+});
+
+// Ensure music keeps looping
+bgMusic.addEventListener('ended', () => {
+    bgMusic.currentTime = 0;
+    bgMusic.play();
 });
 
 // Confetti system
@@ -203,18 +219,24 @@ yesBtn.addEventListener('click', () => {
     }, 500);
 });
 
-// Make the No button run away when hovering
-noBtn.addEventListener('mouseover', () => {
+// Make the No button run away when hovering or touching
+noBtn.addEventListener('mouseover', moveNoButton);
+noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    moveNoButton();
+});
+
+function moveNoButton() {
     const maxX = window.innerWidth - noBtn.offsetWidth - 100;
     const maxY = window.innerHeight - noBtn.offsetHeight - 100;
     
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
+    const randomX = Math.floor(Math.random() * Math.max(maxX, 100));
+    const randomY = Math.floor(Math.random() * Math.max(maxY, 100));
     
     noBtn.style.position = 'fixed';
     noBtn.style.left = randomX + 'px';
     noBtn.style.top = randomY + 'px';
-});
+}
 
 // Sparkle cursor trail
 let lastSparkleTime = 0;

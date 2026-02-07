@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -30,6 +31,8 @@ body.shake {
     animation: fadeIn 0.8s ease;
     transform-style: preserve-3d;
     transition: transform 0.3s ease;
+    max-width: 90vw;
+    margin: 0 auto;
 }
 
 .love-message {
@@ -42,6 +45,7 @@ body.shake {
     margin-right: auto;
     font-style: italic;
     min-height: 180px;
+    text-align: left;
 }
 
 .love-message::after {
@@ -74,6 +78,10 @@ body.shake {
     transition: all 0.3s ease;
     font-weight: bold;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .yes-btn {
@@ -132,6 +140,7 @@ body.shake {
     height: 400px;
     margin: 0 auto;
     filter: drop-shadow(0 10px 30px rgba(255, 107, 157, 0.4));
+    max-width: 90vw;
 }
 
 .stem {
@@ -734,23 +743,69 @@ body.shake {
 
 @media (max-width: 768px) {
     .title {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
     
     .container {
-        padding: 40px 30px;
+        padding: 30px 20px;
+        max-width: 95vw;
+    }
+    
+    .love-message {
+        font-size: 1rem;
+        line-height: 1.6;
+        min-height: auto;
+        margin-bottom: 20px;
     }
     
     .btn {
-        padding: 15px 35px;
+        padding: 15px 30px;
         font-size: 1.2rem;
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .buttons {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
     }
     
     .message {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        margin-bottom: 30px;
     }
     
     .flower-garden {
-        gap: 50px;
+        gap: 30px;
+        flex-direction: column;
+    }
+    
+    .flower {
+        transform: scale(0.8);
+    }
+    
+    .heart-3d {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .heart-3d::before,
+    .heart-3d::after {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .heart-3d::before {
+        top: -12px;
+    }
+    
+    .heart-3d::after {
+        left: 12px;
+    }
+    
+    .heart-3d .heart-core {
+        width: 25px;
+        height: 25px;
     }
 }
