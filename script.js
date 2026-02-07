@@ -42,20 +42,31 @@ function typeWriter(element, text, speed = 30) {
 
 let audioUnlocked = false;
 
-function enableAudioOnFirstInteraction() {
-    const startMusic = () => {
-        if (audioUnlocked) return;
-        audioUnlocked = true;
-        bgMusic.muted = false;
-        bgMusic.play().catch(() => {});
-        if (soundHint) {
-            soundHint.classList.add('hidden');
-        }
-    };
+function startMusic() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+    bgMusic.muted = false;
+    bgMusic.currentTime = bgMusic.currentTime || 0;
+    bgMusic.play().catch(() => {
+        // Retry once for mobile browsers that delay audio unlocking
+        setTimeout(() => {
+            bgMusic.play().catch(() => {});
+        }, 100);
+    });
+    if (soundHint) {
+        soundHint.classList.add('hidden');
+    }
+}
 
+function enableAudioOnFirstInteraction() {
     document.addEventListener('pointerdown', startMusic, { once: true });
     document.addEventListener('touchstart', startMusic, { once: true });
+    document.addEventListener('touchend', startMusic, { once: true });
     document.addEventListener('click', startMusic, { once: true });
+    if (soundHint) {
+        soundHint.addEventListener('click', startMusic, { once: true });
+        soundHint.addEventListener('touchend', startMusic, { once: true });
+    }
 }
 
 function attemptAutoplay() {
