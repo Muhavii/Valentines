@@ -47,7 +47,8 @@ body.shake {
     min-height: 180px;
     text-align: left;
     contain: layout style paint;
-    word-wrap: break-word;\n    font-smoothing: antialiased;\n    -webkit-font-smoothing: antialiased;
+    word-wrap: break-word;
+    -webkit-font-smoothing: antialiased;
 }
 
 .love-message::after {
