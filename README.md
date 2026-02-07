@@ -53,4 +53,4 @@ Then on mobile, visit: `http://[YOUR_IP]:8000`
 - `script.js` - Interactive effects and animations
 - `NightsLikeThis.mp3` - Background music
 
-## Made with 💖
+## Made by Haviee ❤️
