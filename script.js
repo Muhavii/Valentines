@@ -10,6 +10,7 @@ const particlesContainer = document.getElementById('particles');
 const hearts3dContainer = document.getElementById('hearts3d');
 const flowerGarden = document.getElementById('flowerGarden');
 const bgMusic = document.getElementById('bgMusic');
+const soundHint = document.getElementById('soundHint');
 
 // Detect mobile
 const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -39,37 +40,63 @@ function typeWriter(element, text, speed = 30) {
     type();
 }
 
+let audioUnlocked = false;
+
+function enableAudioOnFirstInteraction() {
+    const startMusic = () => {
+        if (audioUnlocked) return;
+        audioUnlocked = true;
+        bgMusic.muted = false;
+        bgMusic.play().catch(() => {});
+        if (soundHint) {
+            soundHint.classList.add('hidden');
+        }
+    };
+
+    document.addEventListener('pointerdown', startMusic, { once: true });
+    document.addEventListener('touchstart', startMusic, { once: true });
+    document.addEventListener('click', startMusic, { once: true });
+}
+
+function attemptAutoplay() {
+    bgMusic.loop = true;
+    bgMusic.muted = false;
+
+    const playPromise = bgMusic.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.then(() => {
+            if (soundHint) {
+                soundHint.classList.add('hidden');
+            }
+        }).catch(() => {
+            // Fallback: start muted, then unmute on first interaction
+            bgMusic.muted = true;
+            bgMusic.play().catch(() => {});
+            if (soundHint) {
+                soundHint.classList.remove('hidden');
+            }
+            enableAudioOnFirstInteraction();
+        });
+    } else {
+        if (soundHint) {
+            soundHint.classList.remove('hidden');
+        }
+        enableAudioOnFirstInteraction();
+    }
+}
+
 // Start typewriter and music on load
 window.addEventListener('load', () => {
     const text = loveMessage.getAttribute('data-text');
     typeWriter(loveMessage, text);
-    
-    // Ensure music plays immediately
-    setTimeout(() => {
-        const playPromise = bgMusic.play();
-        
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                console.log('Music started playing');
-            }).catch(error => {
-                console.log('Autoplay prevented. Music will start on first interaction.');
-                const startMusic = () => {
-                    bgMusic.play();
-                    document.removeEventListener('click', startMusic);
-                    document.removeEventListener('touchstart', startMusic);
-                };
-                document.addEventListener('click', startMusic);
-                document.addEventListener('touchstart', startMusic);
-            });
-        }
-    }, 100);
+    attemptAutoplay();
 });
 
 // Ensure music keeps looping
 bgMusic.addEventListener('ended', () => {
     bgMusic.currentTime = 0;
-    bgMusic.play().catch(e => console.log('Loop failed:', e));
-}, true);
+    bgMusic.play().catch(() => {});
+});
 
 // Confetti system
 class Confetti {
