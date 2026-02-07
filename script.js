@@ -23,21 +23,17 @@ fireworksCanvas.height = window.innerHeight;
 const confettiCtx = confettiCanvas.getContext('2d');
 const fireworksCtx = fireworksCanvas.getContext('2d');
 
-// Typewriter effect
+// Typewriter effect - optimized for mobile
 function typeWriter(element, text, speed = 30) {
     let i = 0;
     element.textContent = '';
-    const cursor = element.querySelector('::after') || element;
+    const actualSpeed = isMobile ? 80 : speed; // Slower on mobile to reduce lag
     
     function type() {
         if (i < text.length) {
             element.textContent += text.charAt(i);
             i++;
-            setTimeout(type, speed);
-        } else {
-            setTimeout(() => {
-                element.style.removeProperty('--cursor');
-            }, 500);
+            setTimeout(type, actualSpeed);
         }
     }
     type();
@@ -48,31 +44,32 @@ window.addEventListener('load', () => {
     const text = loveMessage.getAttribute('data-text');
     typeWriter(loveMessage, text);
     
-    // Attempt to play music immediately
-    const playPromise = bgMusic.play();
-    
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
-            console.log('Music started playing automatically');
-        }).catch(error => {
-            console.log('Autoplay prevented. Music will start on first interaction.');
-            // Add click listeners to start music on any interaction
-            const startMusic = () => {
-                bgMusic.play();
-                document.removeEventListener('click', startMusic);
-                document.removeEventListener('touchstart', startMusic);
-            };
-            document.addEventListener('click', startMusic);
-            document.addEventListener('touchstart', startMusic);
-        });
-    }
+    // Ensure music plays immediately
+    setTimeout(() => {
+        const playPromise = bgMusic.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log('Music started playing');
+            }).catch(error => {
+                console.log('Autoplay prevented. Music will start on first interaction.');
+                const startMusic = () => {
+                    bgMusic.play();
+                    document.removeEventListener('click', startMusic);
+                    document.removeEventListener('touchstart', startMusic);
+                };
+                document.addEventListener('click', startMusic);
+                document.addEventListener('touchstart', startMusic);
+            });
+        }
+    }, 100);
 });
 
 // Ensure music keeps looping
 bgMusic.addEventListener('ended', () => {
     bgMusic.currentTime = 0;
-    bgMusic.play();
-});
+    bgMusic.play().catch(e => console.log('Loop failed:', e));
+}, true);
 
 // Confetti system
 class Confetti {
@@ -196,7 +193,8 @@ class Fireworks {
 
 // When she clicks Yes
 yesBtn.addEventListener('click', () => {
-    // Ensure music is playing
+    // Unmute and ensure music is playing
+    bgMusic.muted = false;
     if (bgMusic.paused) {
         bgMusic.play().catch(e => console.log('Audio play failed:', e));
     }
