@@ -571,6 +571,8 @@ body.shake {
     height: 100%;
     pointer-events: none;
     z-index: 1000;
+    will-change: contents;
+    image-rendering: pixelated;
 }
 
 #fireworksCanvas {
@@ -637,6 +639,7 @@ body.shake {
     height: 40px;
     animation: float3DHeart 6s ease-in-out infinite;
     transform-style: preserve-3d;
+    will-change: transform;
 }
 
 .heart-3d::before,
@@ -667,7 +670,15 @@ body.shake {
     transform: rotate(45deg);
 }
 
-/* Animations */
+/* GPU acceleration for animations */
+.flower,
+.message,
+.container,
+.btn {
+    will-change: auto;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
 @keyframes gradientShift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -742,6 +753,26 @@ body.shake {
 }
 
 @media (max-width: 768px) {
+    /* Reduce animation complexity on mobile */
+    .float3DHeart {
+        animation-duration: 8s !important;
+    }
+    
+    .particle {
+        display: none !important;
+    }
+    
+    .sparkle-trail {
+        display: none !important;
+    }
+    
+    .heart-3d {
+        will-change: auto;
+    }
+    
+    #confettiCanvas, #fireworksCanvas {
+        will-change: auto;
+    }
     .title {
         font-size: 1.8rem;
     }

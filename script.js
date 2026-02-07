@@ -11,6 +11,9 @@ const hearts3dContainer = document.getElementById('hearts3d');
 const flowerGarden = document.getElementById('flowerGarden');
 const bgMusic = document.getElementById('bgMusic');
 
+// Detect mobile
+const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 // Initialize canvases
 confettiCanvas.width = window.innerWidth;
 confettiCanvas.height = window.innerHeight;
@@ -76,10 +79,11 @@ class Confetti {
     constructor() {
         this.particles = [];
         this.colors = ['#ff6b9d', '#ffa6c9', '#ff1744', '#f50057', '#ffd700', '#ff4081'];
+        this.count = isMobile ? 50 : 150; // Reduce on mobile
     }
     
     create() {
-        for (let i = 0; i < 150; i++) {
+        for (let i = 0; i < this.count; i++) {
             this.particles.push({
                 x: Math.random() * confettiCanvas.width,
                 y: -20,
@@ -93,7 +97,9 @@ class Confetti {
         }
     }
     
-    animate() {
+    animate(frameCount = 0) {
+        if (frameCount % 2 !== 0 && isMobile) return; // Skip frames on mobile
+        
         confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
         
         this.particles.forEach((p, index) => {
@@ -114,7 +120,7 @@ class Confetti {
         });
         
         if (this.particles.length > 0) {
-            requestAnimationFrame(() => this.animate());
+            requestAnimationFrame(() => this.animate(frameCount + 1));
         }
     }
 }
@@ -124,10 +130,12 @@ class Fireworks {
     constructor() {
         this.fireworks = [];
         this.particles = [];
+        this.fireworkCount = isMobile ? 2 : 5; // Fewer on mobile
+        this.particlePerFirework = isMobile ? 25 : 50; // Fewer particles
     }
     
     create() {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < this.fireworkCount; i++) {
             setTimeout(() => {
                 this.addFirework();
             }, i * 400);
@@ -140,8 +148,8 @@ class Fireworks {
         const colors = ['#ff6b9d', '#ffa6c9', '#ff1744', '#ffd700', '#ff4081', '#fff'];
         const color = colors[Math.floor(Math.random() * colors.length)];
         
-        for (let i = 0; i < 50; i++) {
-            const angle = (Math.PI * 2 * i) / 50;
+        for (let i = 0; i < this.particlePerFirework; i++) {
+            const angle = (Math.PI * 2 * i) / this.particlePerFirework;
             const speed = Math.random() * 4 + 2;
             this.particles.push({
                 x: x,
@@ -155,7 +163,9 @@ class Fireworks {
         }
     }
     
-    animate() {
+    animate(frameCount = 0) {
+        if (frameCount % 2 !== 0 && isMobile) return; // Skip frames on mobile
+        
         fireworksCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
         fireworksCtx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
         
@@ -177,7 +187,7 @@ class Fireworks {
         });
         
         if (this.particles.length > 0) {
-            requestAnimationFrame(() => this.animate());
+            requestAnimationFrame(() => this.animate(frameCount + 1));
         } else {
             fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
         }
@@ -238,15 +248,17 @@ function moveNoButton() {
     noBtn.style.top = randomY + 'px';
 }
 
-// Sparkle cursor trail
+// Sparkle cursor trail - disable on mobile
 let lastSparkleTime = 0;
-document.addEventListener('mousemove', (e) => {
-    const now = Date.now();
-    if (now - lastSparkleTime > 50) {
-        createSparkle(e.clientX, e.clientY);
-        lastSparkleTime = now;
-    }
-});
+if (!isMobile) {
+    document.addEventListener('mousemove', (e) => {
+        const now = Date.now();
+        if (now - lastSparkleTime > 50) {
+            createSparkle(e.clientX, e.clientY);
+            lastSparkleTime = now;
+        }
+    });
+}
 
 function createSparkle(x, y) {
     const sparkle = document.createElement('div');
@@ -258,8 +270,10 @@ function createSparkle(x, y) {
     setTimeout(() => sparkle.remove(), 800);
 }
 
-// Ambient particles
+// Ambient particles - disable on mobile for better performance
 function createAmbientParticles() {
+    if (isMobile) return; // Skip on mobile
+    
     for (let i = 0; i < 30; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
@@ -273,7 +287,8 @@ function createAmbientParticles() {
 
 // 3D floating hearts
 function createFloating3DHearts() {
-    for (let i = 0; i < 15; i++) {
+    const heartCount = isMobile ? 5 : 15; // Fewer on mobile
+    for (let i = 0; i < heartCount; i++) {
         setTimeout(() => {
             const heart = document.createElement('div');
             heart.className = 'heart-3d';
